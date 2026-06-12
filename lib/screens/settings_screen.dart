@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../providers/app_provider.dart';
+import '../models/language_option.dart';
 import '../utils/constants.dart';
+import 'language_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -9,12 +12,14 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AppProvider>();
+    final selectedLang = langByCode(provider.translationLang);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          // ── Display ────────────────────────────────────────────────────
           _SectionLabel('Display'),
           Card(
             child: Column(
@@ -45,33 +50,51 @@ class SettingsScreen extends StatelessWidget {
                   trailing: Text(
                     provider.fontSize.round().toString(),
                     style: const TextStyle(
-                        color: Color(0xFFC8922A), fontWeight: FontWeight.bold),
+                        color: Color(0xFFC8922A),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
             ),
           ),
+
+          // ── Language ───────────────────────────────────────────────────
           const SizedBox(height: 16),
           _SectionLabel('Language'),
           Card(
-            child: RadioGroup<Language>(
-              groupValue: provider.language,
-              onChanged: (v) => provider.setLanguage(v!),
-              child: Column(
-                children: const [
-                  RadioListTile<Language>(
-                    title: Text('हिन्दी (Hindi)'),
-                    value: Language.hindi,
+            child: ListTile(
+              leading: const Icon(Icons.translate,
+                  color: Color(0xFFC8922A)),
+              title: const Text('Translation Language'),
+              subtitle: Row(
+                children: [
+                  Text(
+                    selectedLang.name,
+                    style: GoogleFonts.tiroDevanagariMarathi(
+                      fontSize: 14,
+                      color: const Color(0xFFC8922A),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  Divider(height: 1, indent: 16),
-                  RadioListTile<Language>(
-                    title: Text('English'),
-                    value: Language.english,
+                  const SizedBox(width: 6),
+                  Text(
+                    '(${selectedLang.nameEn})',
+                    style: TextStyle(
+                        fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
+              trailing: const Icon(Icons.chevron_right,
+                  color: Color(0xFFC8922A)),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const LanguageScreen()),
+              ),
             ),
           ),
+
+          // ── About ──────────────────────────────────────────────────────
           const SizedBox(height: 16),
           _SectionLabel('About'),
           Card(
@@ -96,18 +119,21 @@ class SettingsScreen extends StatelessWidget {
                         Text(
                           AppConstants.appName,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
                         ),
                         SizedBox(height: 2),
                         Text(
                           AppConstants.appNameHindi,
                           style: TextStyle(
-                              color: Color(0xFFC8922A), fontSize: 13),
+                              color: Color(0xFFC8922A),
+                              fontSize: 13),
                         ),
                         SizedBox(height: 4),
                         Text(
                           'Version 1.0.0',
-                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                          style: TextStyle(
+                              color: Colors.grey, fontSize: 12),
                         ),
                       ],
                     ),

@@ -5,10 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/chapter.dart';
 import '../models/shloka.dart';
 
-enum Language { hindi, english }
-
 class AppProvider extends ChangeNotifier {
-  Language _language = Language.hindi;
+  // Translation language code (default Hindi).
+  // Sanskrit and English are always shown; only this slot changes.
+  String _translationLang = 'hi';
+
   bool _isDarkMode = false;
   double _fontSize = 16.0;
   List<ChapterInfo> _chapters = [];
@@ -16,7 +17,7 @@ class AppProvider extends ChangeNotifier {
   int _currentChapter = 1;
   Set<String> _bookmarks = {};
 
-  Language get language => _language;
+  String get translationLang => _translationLang;
   bool get isDarkMode => _isDarkMode;
   double get fontSize => _fontSize;
   List<ChapterInfo> get chapters => _chapters;
@@ -33,8 +34,7 @@ class AppProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     _isDarkMode = prefs.getBool('darkMode') ?? false;
     _fontSize = prefs.getDouble('fontSize') ?? 16.0;
-    final langIndex = prefs.getInt('language') ?? 0;
-    _language = Language.values[langIndex];
+    _translationLang = prefs.getString('translationLang') ?? 'hi';
     _bookmarks = Set<String>.from(prefs.getStringList('bookmarks') ?? []);
     notifyListeners();
   }
@@ -50,7 +50,8 @@ class AppProvider extends ChangeNotifier {
 
   Future<void> loadChapter(int chapterNum) async {
     _currentChapter = chapterNum;
-    final jsonStr = await rootBundle.loadString('assets/database/chapter$chapterNum.json');
+    final jsonStr =
+        await rootBundle.loadString('assets/database/chapter$chapterNum.json');
     final data = jsonDecode(jsonStr) as Map<String, dynamic>;
     _currentShlokas = (data['items'] as List)
         .map((e) => Shloka.fromJson(e as Map<String, dynamic>))
@@ -58,10 +59,10 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setLanguage(Language lang) async {
-    _language = lang;
+  void setTranslationLang(String code) async {
+    _translationLang = code;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('language', lang.index);
+    await prefs.setString('translationLang', code);
     notifyListeners();
   }
 

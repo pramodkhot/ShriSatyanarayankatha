@@ -27,4 +27,29 @@ class Shloka {
     final parts = id.split('-');
     return parts.length > 1 ? parts[1] : id;
   }
+
+  // Returns translation for langCode; falls back to Hindi if not available.
+  String getTranslation(String langCode) {
+    switch (langCode) {
+      case 'hi':
+        return expHi;
+      case 'mr':
+        return expMr.isNotEmpty ? expMr : expHi;
+      default:
+        // Future: add exp_gu, exp_ta, etc. to JSON and handle here.
+        return expHi;
+    }
+  }
+
+  // Whether native data exists for this langCode (not a fallback).
+  bool hasNativeTranslation(String langCode) {
+    switch (langCode) {
+      case 'hi':
+        return expHi.isNotEmpty;
+      case 'mr':
+        return expMr.isNotEmpty;
+      default:
+        return false;
+    }
+  }
 }
