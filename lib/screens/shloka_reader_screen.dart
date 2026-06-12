@@ -8,11 +8,13 @@ import '../models/language_option.dart';
 class ShlokReaderScreen extends StatefulWidget {
   final int chapterNum;
   final String chapterTitle;
+  final int initialPage;
 
   const ShlokReaderScreen({
     super.key,
     required this.chapterNum,
     required this.chapterTitle,
+    this.initialPage = 0,
   });
 
   @override
@@ -20,8 +22,15 @@ class ShlokReaderScreen extends StatefulWidget {
 }
 
 class _ShlokReaderScreenState extends State<ShlokReaderScreen> {
-  final PageController _pageController = PageController();
-  int _currentIndex = 0;
+  late PageController _pageController;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialPage;
+    _pageController = PageController(initialPage: widget.initialPage);
+  }
 
   @override
   void dispose() {
@@ -55,7 +64,6 @@ class _ShlokReaderScreenState extends State<ShlokReaderScreen> {
             ),
           ],
         ),
-        // Show active translation language as a chip in the AppBar
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
@@ -84,8 +92,8 @@ class _ShlokReaderScreenState extends State<ShlokReaderScreen> {
       ),
       body: shlokas.isEmpty
           ? const Center(
-              child:
-                  CircularProgressIndicator(color: Color(0xFFC8922A)),
+              child: CircularProgressIndicator(
+                  color: Color(0xFFC8922A)),
             )
           : Column(
               children: [
@@ -133,56 +141,60 @@ class _ShlokReaderScreenState extends State<ShlokReaderScreen> {
                     },
                   ),
                 ),
-                // Prev / Next navigation
-                Padding(
-                  padding:
-                      const EdgeInsets.fromLTRB(20, 4, 20, 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: _currentIndex > 0
-                              ? () => _pageController.previousPage(
-                                    duration: const Duration(
-                                        milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  )
-                              : null,
-                          icon: const Icon(
-                              Icons.arrow_back_ios,
-                              size: 14),
-                          label: const Text('Prev'),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor:
-                                const Color(0xFFC8922A),
-                            side: const BorderSide(
-                                color: Color(0xFFC8922A)),
+                // SafeArea keeps Prev/Next above phone navigation bar
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.fromLTRB(20, 4, 20, 12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: _currentIndex > 0
+                                ? () =>
+                                    _pageController.previousPage(
+                                      duration: const Duration(
+                                          milliseconds: 300),
+                                      curve: Curves.easeInOut,
+                                    )
+                                : null,
+                            icon: const Icon(
+                                Icons.arrow_back_ios,
+                                size: 14),
+                            label: const Text('Prev'),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor:
+                                  const Color(0xFFC8922A),
+                              side: const BorderSide(
+                                  color: Color(0xFFC8922A)),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed:
-                              _currentIndex < shlokas.length - 1
-                                  ? () => _pageController.nextPage(
-                                        duration: const Duration(
-                                            milliseconds: 300),
-                                        curve: Curves.easeInOut,
-                                      )
-                                  : null,
-                          icon: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 14),
-                          label: const Text('Next'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color(0xFFC8922A),
-                            foregroundColor: Colors.white,
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: _currentIndex <
+                                    shlokas.length - 1
+                                ? () => _pageController.nextPage(
+                                      duration: const Duration(
+                                          milliseconds: 300),
+                                      curve: Curves.easeInOut,
+                                    )
+                                : null,
+                            icon: const Icon(
+                                Icons.arrow_forward_ios,
+                                size: 14),
+                            label: const Text('Next'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color(0xFFC8922A),
+                              foregroundColor: Colors.white,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

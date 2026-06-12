@@ -2,9 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../providers/app_provider.dart';
+import 'shloka_reader_screen.dart';
 
 class BookmarkScreen extends StatelessWidget {
   const BookmarkScreen({super.key});
+
+  Future<void> _openBookmark(BuildContext context, String key) async {
+    final dashIndex = key.indexOf('-');
+    if (dashIndex < 0) return;
+
+    final chapterNum = int.parse(key.substring(0, dashIndex));
+    final shlokaId = key.substring(dashIndex + 1);
+
+    final provider = context.read<AppProvider>();
+
+    // Find chapter title
+    final chapters = provider.chapters;
+    final chapterInfo = chapters.firstWhere(
+      (c) => c.id == chapterNum,
+      orElse: () => chapters.first,
+    );
+
+    // Load the chapter shlokas
+    await provider.loadChapter(chapterNum);
+
+    if (!context.mounted) return;
+
+    // Find the page index for this shloka
+    final shlokas = provider.currentShlokas;
+    final pageIndex =
+        shlokas.indexWhere((s) => s.id == shlokaId);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ShlokReaderScreen(
+          chapterNum: chapterNum,
+          chapterTitle: chapterInfo.subtitle,
+          initialPage: pageIndex >= 0 ? pageIndex : 0,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +68,8 @@ class BookmarkScreen extends StatelessWidget {
                   const SizedBox(height: 6),
                   const Text(
                     'Tap the bookmark icon while reading a shloka',
-                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                    style:
+                        TextStyle(color: Colors.grey, fontSize: 13),
                   ),
                 ],
               ),
@@ -39,9 +79,14 @@ class BookmarkScreen extends StatelessWidget {
               itemCount: bookmarks.length,
               itemBuilder: (context, index) {
                 final key = bookmarks[index];
-                final parts = key.split('-');
-                final chap = parts[0];
-                final verse = parts.length > 1 ? parts[1] : parts[0];
+                final dashIndex = key.indexOf('-');
+                final chap = dashIndex >= 0
+                    ? key.substring(0, dashIndex)
+                    : key;
+                final verse = dashIndex >= 0
+                    ? key.substring(dashIndex + 1)
+                    : key;
+
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   child: ListTile(
@@ -55,14 +100,27 @@ class BookmarkScreen extends StatelessWidget {
                         fontSize: 12,
                       ),
                     ),
-                    subtitle: Text('Shloka $verse',
-                        style: const TextStyle(fontSize: 14)),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete_outline,
-                          size: 20, color: Colors.grey),
-                      onPressed: () =>
-                          context.read<AppProvider>().toggleBookmark(key),
+                    subtitle: Text(
+                      'Shloka $verse  •  Tap to read',
+                      style: const TextStyle(fontSize: 13),
                     ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.chevron_right,
+                            color: Color(0xFFC8922A), size: 20),
+                        const SizedBox(width: 4),
+                        IconButton(
+                          icon: const Icon(Icons.delete_outline,
+                              size: 20, color: Colors.grey),
+                          tooltip: 'Remove bookmark',
+                          onPressed: () => context
+                              .read<AppProvider>()
+                              .toggleBookmark(key),
+                        ),
+                      ],
+                    ),
+                    onTap: () => _openBookmark(context, key),
                   ),
                 );
               },

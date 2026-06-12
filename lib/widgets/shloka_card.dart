@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 import '../models/shloka.dart';
 import '../models/language_option.dart';
 
@@ -7,7 +8,7 @@ class ShlokaCard extends StatelessWidget {
   final Shloka shloka;
   final int chapterNum;
   final String bookmarkKey;
-  final String translationLang; // language code from AppProvider
+  final String translationLang;
   final double fontSize;
   final bool isBookmarked;
   final VoidCallback onBookmark;
@@ -22,6 +23,35 @@ class ShlokaCard extends StatelessWidget {
     required this.isBookmarked,
     required this.onBookmark,
   });
+
+  void _share(BuildContext context) {
+    final lang = langByCode(translationLang);
+    final hasNative = shloka.hasNativeTranslation(translationLang);
+    final translation = shloka.getTranslation(translationLang);
+
+    final buffer = StringBuffer();
+    buffer.writeln('अष्टावक्र गीता');
+    buffer.writeln(
+        'Chapter $chapterNum  •  Shloka ${shloka.verseNumber}');
+    buffer.writeln();
+    buffer.writeln('━━━━━━━━━━━━━━━━━━━━━━━━');
+    buffer.writeln(shloka.shlok);
+    buffer.writeln();
+    buffer.writeln('── ${lang.name} ──');
+    if (!hasNative && translationLang != 'hi') {
+      buffer.writeln('(${lang.nameEn} translation coming soon — showing Hindi)');
+    }
+    buffer.writeln(translation);
+    buffer.writeln();
+    buffer.writeln('── In English ──');
+    buffer.writeln(shloka.expEn);
+    buffer.writeln();
+    buffer.writeln('📱 Ashtavakra Gita App');
+    buffer.write(
+        'https://play.google.com/store/apps/details?id=com.creative.ashtavakra_gita');
+
+    Share.share(buffer.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +71,18 @@ class ShlokaCard extends StatelessWidget {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _Badge('श्लोक ${shloka.verseNumber}'),
+                    const Spacer(),
+                    // Share button
+                    IconButton(
+                      icon: const Icon(Icons.share_outlined,
+                          color: Color(0xFFC8922A)),
+                      onPressed: () => _share(context),
+                      visualDensity: VisualDensity.compact,
+                      tooltip: 'Share',
+                    ),
+                    // Bookmark button
                     IconButton(
                       icon: Icon(
                         isBookmarked
@@ -53,10 +92,11 @@ class ShlokaCard extends StatelessWidget {
                       ),
                       onPressed: onBookmark,
                       visualDensity: VisualDensity.compact,
+                      tooltip: 'Bookmark',
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Text(
                   shloka.shlok,
                   style: GoogleFonts.tiroDevanagariMarathi(
@@ -77,9 +117,7 @@ class ShlokaCard extends StatelessWidget {
           _SectionDivider(
             label: lang.name,
             isDark: isDark,
-            trailing: !hasNative && translationLang != 'hi'
-                ? _FallbackChip(lang.nameEn)
-                : null,
+            showSoon: !hasNative && translationLang != 'hi',
           ),
           const SizedBox(height: 12),
           _ExplanationContainer(
@@ -156,7 +194,7 @@ class _VerseContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.fromLTRB(16, 12, 8, 16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -206,9 +244,9 @@ class _ExplanationContainer extends StatelessWidget {
 class _SectionDivider extends StatelessWidget {
   final String label;
   final bool isDark;
-  final Widget? trailing;
+  final bool showSoon;
   const _SectionDivider(
-      {required this.label, required this.isDark, this.trailing});
+      {required this.label, required this.isDark, this.showSoon = false});
 
   @override
   Widget build(BuildContext context) {
@@ -232,9 +270,23 @@ class _SectionDivider extends StatelessWidget {
                   letterSpacing: 0.5,
                 ),
               ),
-              if (trailing != null) ...[
-                const SizedBox(width: 6),
-                trailing!,
+              if (showSoon) ...[
+                const SizedBox(width: 5),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 5, vertical: 1),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                        color: Colors.orange.withValues(alpha: 0.4)),
+                  ),
+                  child: const Text('Soon',
+                      style: TextStyle(
+                          fontSize: 9,
+                          color: Colors.orange,
+                          fontWeight: FontWeight.bold)),
+                ),
               ],
             ],
           ),
@@ -265,32 +317,6 @@ class _Badge extends StatelessWidget {
         style: const TextStyle(
           color: Colors.white,
           fontSize: 11,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}
-
-class _FallbackChip extends StatelessWidget {
-  final String langName;
-  const _FallbackChip(this.langName);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: Colors.orange.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(4),
-        border:
-            Border.all(color: Colors.orange.withValues(alpha: 0.4)),
-      ),
-      child: Text(
-        'Soon',
-        style: const TextStyle(
-          fontSize: 9,
-          color: Colors.orange,
           fontWeight: FontWeight.bold,
         ),
       ),
