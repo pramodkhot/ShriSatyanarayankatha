@@ -1,0 +1,37 @@
+name: ashtavakra_gita
+description: Ashtavakra Gita - The Song of the Self
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.2
+  shared_preferences: ^2.3.2
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.1
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/ast_img.jpeg"
+  min_sdk_android: 21
+  adaptive_icon_background: "#C8922A"
+  adaptive_icon_foreground: "assets/images/ast_img.jpeg"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/database/

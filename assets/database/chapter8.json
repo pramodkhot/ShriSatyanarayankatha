@@ -1,0 +1,30 @@
+{
+    "items":
+    [
+        {
+            "id": "1",
+            "shlok": "अष्टावक्र उवाच-तदा बन्धो यदा चित्तं किन्चिद् वांछति शोचति।\nकिंचिन् मुंचति गृण्हाति किंचिद् हृष्यति कुप्यति॥१॥",
+            "exp_hi": "श्री अष्टावक्र कहते हैं-तब बंधन है जब मन इच्छा करता है, शोक करता है, कुछ त्याग करता है, कुछ ग्रहण करता है, कभी प्रसन्न होता है या कभी क्रोधित होता है॥१॥",
+            "exp_en": "Sri Ashtavakra says: There is bondage, as long as mind desires something, grieves about something, sacrifices something, accepts something, is pleased about something or is angry about something.॥1॥"
+        },
+        {
+            "id": "2",
+            "shlok": "तदा मुक्तिर्यदा चित्तं न वांछति न शोचति।\nन मुंचति न गृण्हाति न हृष्यति न कुप्यति॥२॥",
+            "exp_hi": "तब मुक्ति है जब मन इच्छा नहीं करता है, शोक नहीं करता है, त्याग नहीं करता है, ग्रहण नहीं करता है, प्रसन्न नहीं होता है या क्रोधित नहीं होता है॥२॥",
+            "exp_en": "Liberation is when mind does not desire, does not grieve, does not sacrifice, does not accept, is not pleased or get angry.॥2॥"
+        },
+        {
+            "id": "3",
+            "shlok": "तदा बन्धो यदा चित्तं सक्तं काश्वपि दृष्टिषु।\nतदा मोक्षो यदा चित्तम-सक्तं सर्वदृष्टिषु॥३॥",
+            "exp_hi": "तब बंधन है जब मन किसी भी दृश्यमान वस्तु में आसक्त है, तब मुक्ति है जब मन किसी भी दृश्यमान वस्तु में आसक्तिरहित है॥३॥",
+            "exp_en": "There is bondage when mind is attracted towards any of the visible things and liberation is when mind is not attracted to anything visible.॥3॥"
+        },
+        {
+            "id": "4",
+            "shlok": "यदा नाहं तदा मोक्षो यदाहं बन्धनं तदा।\nमत्वेति हेलया किंचिन्-मा गृहाण विमुंच मा॥४॥",
+            "exp_hi": "जब तक 'मैं' या 'मेरा' का भाव है तब तक बंधन है, जब 'मैं' या 'मेरा' का भाव नहीं है तब मुक्ति है। यह जानकर न कुछ त्याग करो और न कुछ ग्रहण ही करो॥४॥",
+            "exp_en": "There is bondage, as long as there is feeling of 'I' and 'my' and liberation is when there is no feeling of 'I' and 'my'. Knowing this stay playful neither accepting nor sacrificing anything.॥4॥"
+        }
+       
+    ]
+}

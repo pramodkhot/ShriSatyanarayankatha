@@ -1,0 +1,29 @@
+{
+    "items":
+    [
+        {
+            "id": "1",
+            "shlok": "अष्टावक्र उवाच-आकाशवदनन्तोऽहं घटवत् प्राकृतं जगत्।\nइति ज्ञानं तथैतस्य न त्यागो न ग्रहो लयः॥१॥",
+            "exp_hi": "अष्टावक्र कहते हैं-आकाश के समान मैं अनंत हूँ और यह जगत घड़े के समान महत्त्वहीन है, यह ज्ञान है। इसका न त्याग करना है और न ग्रहण, बस इसके साथ एकरूप होना है॥१॥",
+            "exp_en": "Ashtavakra says-I am infinite like space, and this world is unimportant like a jar. This is Knowledge. This is neither to be renounced nor to be accepted but to be one with it.॥1॥"
+        },
+        {
+            "id": "2",
+            "shlok": "महोदधिरिवाहं स प्रपंचो वीचिसऽन्निभः।\nइति ज्ञानं तथैतस्य न त्यागो न ग्रहो लयः॥२॥",
+            "exp_hi": "मैं महासागर के समान हूँ और यह दृश्यमान संसार लहरों के समान। यह ज्ञान है, इसका न त्याग करना है और न ग्रहण बस इसके साथ एकरूप होना है॥२॥",
+            "exp_en": "I am like a vast ocean and the visible world is like its waves. This is Knowledge. This is neither to be renounced nor to be accepted but to be one with it.॥2॥"
+        },
+        {
+            "id": "3",
+            "shlok": "अहं स शुक्तिसङ्काशो रूप्यवद् विश्वकल्पना।\nइति ज्ञानं तथैतस्य न त्यागो न ग्रहो लयः॥३॥",
+            "exp_hi": "यह विश्व मुझमें वैसे ही कल्पित है जैसे कि सीप में चाँदी। यह ज्ञान है, इसका न त्याग करना है और न ग्रहण बस इसके साथ एकरूप होना है॥३॥",
+            "exp_en": "This world is imagined in me like silver in a sea-shell. This is Knowledge. This is neither to be renounced nor to be accepted but to be one with it.॥3॥"
+        },
+        {
+            "id": "4",
+            "shlok": "अहं वा सर्वभूतेषु सर्वभूतान्यथो मयि।\nइति ज्ञानं तथैतस्य न त्यागो न ग्रहो लयः॥४॥",
+            "exp_hi": "मैं समस्त प्राणियों में हूँ जैसे सभी प्राणी मुझमें हैं। यह ज्ञान है, इसका न त्याग करना है और न ग्रहण बस इसके साथ एकरूप होना है॥४॥",
+            "exp_en": "I exist in everyone like everyone is in me. This is Knowledge. This is neither to be renounced nor to be accepted but to be one with it.॥4॥"
+        }
+    ]
+}
