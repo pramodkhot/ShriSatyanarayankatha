@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
                   secondary: const Icon(Icons.dark_mode_outlined,
                       color: Color(0xFFC8922A)),
                   value: provider.isDarkMode,
-                  activeColor: const Color(0xFFC8922A),
+                  activeThumbColor: const Color(0xFFC8922A),
                   onChanged: (_) => provider.toggleDarkMode(),
                 ),
                 const Divider(height: 1, indent: 16),
@@ -54,24 +54,22 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 16),
           _SectionLabel('Language'),
           Card(
-            child: Column(
-              children: [
-                RadioListTile<Language>(
-                  title: const Text('हिन्दी (Hindi)'),
-                  value: Language.hindi,
-                  groupValue: provider.language,
-                  activeColor: const Color(0xFFC8922A),
-                  onChanged: (v) => provider.setLanguage(v!),
-                ),
-                const Divider(height: 1, indent: 16),
-                RadioListTile<Language>(
-                  title: const Text('English'),
-                  value: Language.english,
-                  groupValue: provider.language,
-                  activeColor: const Color(0xFFC8922A),
-                  onChanged: (v) => provider.setLanguage(v!),
-                ),
-              ],
+            child: RadioGroup<Language>(
+              groupValue: provider.language,
+              onChanged: (v) => provider.setLanguage(v!),
+              child: Column(
+                children: const [
+                  RadioListTile<Language>(
+                    title: Text('हिन्दी (Hindi)'),
+                    value: Language.hindi,
+                  ),
+                  Divider(height: 1, indent: 16),
+                  RadioListTile<Language>(
+                    title: Text('English'),
+                    value: Language.english,
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 16),
