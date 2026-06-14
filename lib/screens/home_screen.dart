@@ -11,7 +11,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
+      body: SafeArea(
+        top: false,
+        child: CustomScrollView(
         slivers: [
           SliverAppBar(
             expandedHeight: 310,
@@ -95,12 +97,13 @@ class HomeScreen extends StatelessWidget {
                   _AboutSection(),
                   const SizedBox(height: 32),
                   _QuoteCard(),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),
           ),
         ],
+        ),
       ),
     );
   }
