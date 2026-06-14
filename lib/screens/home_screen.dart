@@ -10,13 +10,15 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Status bar height — used to push the image below the notification bar
+    final topInset = MediaQuery.of(context).padding.top;
+
     return Scaffold(
-      body: SafeArea(
-        top: false,
-        child: CustomScrollView(
+      body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 310,
+            // Total expanded height = status bar + visible image area
+            expandedHeight: topInset + 300,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
@@ -27,20 +29,32 @@ class HomeScreen extends StatelessWidget {
                   fontSize: 20,
                 ),
               ),
-              background: Stack(
-                fit: StackFit.expand,
+              background: Column(
                 children: [
-                  Image.asset(AppConstants.appImage, fit: BoxFit.cover),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.72),
-                        ],
-                      ),
+                  // Push image below the status bar so its text is visible
+                  SizedBox(height: topInset),
+                  Expanded(
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.asset(
+                          AppConstants.appImage,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topCenter,
+                        ),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withValues(alpha: 0.72),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -67,43 +81,47 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _StatsCard(),
-                  const SizedBox(height: 24),
-                  ElevatedButton.icon(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => const ChapterListScreen()),
+          // SliverSafeArea adds bottom padding so the quote card
+          // never goes behind the phone's navigation bar
+          SliverSafeArea(
+            top: false,
+            sliver: SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _StatsCard(),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const ChapterListScreen()),
+                      ),
+                      icon: const Icon(Icons.menu_book_rounded),
+                      label: const Text('Read Ashtavakra Gita'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFC8922A),
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 54),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        textStyle: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    icon: const Icon(Icons.menu_book_rounded),
-                    label: const Text('Read Ashtavakra Gita'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFC8922A),
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 54),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      textStyle: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  _AboutSection(),
-                  const SizedBox(height: 32),
-                  _QuoteCard(),
-                  const SizedBox(height: 8),
-                ],
+                    const SizedBox(height: 32),
+                    _AboutSection(),
+                    const SizedBox(height: 32),
+                    _QuoteCard(),
+                    const SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           ),
         ],
-        ),
       ),
     );
   }
@@ -122,7 +140,7 @@ class _StatsCard extends StatelessWidget {
             _VDivider(),
             _Stat('298', 'Shlokas'),
             _VDivider(),
-            _Stat('2', 'Languages'),
+            _Stat('10', 'Languages'),
           ],
         ),
       ),
