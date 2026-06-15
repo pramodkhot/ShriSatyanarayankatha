@@ -12,11 +12,11 @@ class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   static const _playStoreUrl =
-      'https://play.google.com/store/apps/details?id=com.creative.ashtavakra_gita';
+      'https://play.google.com/store/apps/details?id=com.creative.shri_satyanarayankatha';
 
   Future<void> _shareApp() async {
     await Share.share(
-      'Read the Ashtavakra Gita — a timeless Advaita Vedanta scripture — '
+      'Read the Shri Satyanarayankatha — a timeless Advaita Vedanta scripture — '
       'with Sanskrit, Hindi, and English translations.\n\n'
       '📱 Download the app:\n$_playStoreUrl',
     );
@@ -75,12 +75,12 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             const Text(
-              'Version 1.0.0',
+              'Version 1.0.25',
               style: TextStyle(fontSize: 11, color: Colors.grey),
             ),
             const SizedBox(height: 16),
             Text(
-              'The Ashtavakra Gita records the dialogue between Sage Ashtavakra '
+              'The Shri Satyanarayankatha records the dialogue between Sage Ashtavakra '
               'and King Janaka on the nature of the Self, liberation, and '
               'ultimate reality.',
               style: TextStyle(
@@ -150,7 +150,7 @@ class SettingsScreen extends StatelessWidget {
                       color: Color(0xFFC8922A)),
                   title: const Text('Share App'),
                   subtitle:
-                      const Text('Invite friends to read Ashtavakra Gita'),
+                      const Text('Invite friends to read Shri Satyanarayankatha'),
                   onTap: _shareApp,
                 ),
                 const Divider(height: 1, indent: 16),
@@ -273,7 +273,7 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 24),
           Center(
             child: Text(
-              'Version 1.0.0  •  com.creative.ashtavakra_gita',
+              'Version 1.0.0  •  com.creative.shri_satyanarayankatha',
               style:
                   TextStyle(fontSize: 11, color: Colors.grey[500]),
             ),

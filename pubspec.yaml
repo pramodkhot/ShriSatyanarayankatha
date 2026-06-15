@@ -1,9 +1,9 @@
-name: ashtavakra_gita
-description: Ashtavakra Gita - The Song of the Self
+name: shri_satyanarayankatha
+description: Shri Satyanarayankatha - Explore Shri Satyanarayankatha
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.25+25
 
 environment:
   sdk: ^3.10.7
@@ -16,6 +16,7 @@ dependencies:
   google_fonts: ^6.2.1
   share_plus: ^10.1.4
   url_launcher: ^6.3.1
+  translator: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -26,10 +27,10 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: false
-  image_path: "assets/images/ast_img.jpeg"
+  image_path: "assets/images/satyanarayan.jpg"
   min_sdk_android: 21
   adaptive_icon_background: "#C8922A"
-  adaptive_icon_foreground: "assets/images/ast_img.jpeg"
+  adaptive_icon_foreground: "assets/images/satyanarayan.jpg"
 
 flutter:
   uses-material-design: true

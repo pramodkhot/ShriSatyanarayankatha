@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import '../models/shloka.dart';
-import '../models/language_option.dart';
+import '../providers/app_provider.dart';
 
-class ShlokaCard extends StatelessWidget {
+class ShlokaCard extends StatefulWidget {
   final Shloka shloka;
   final int chapterNum;
   final String bookmarkKey;
@@ -24,73 +25,99 @@ class ShlokaCard extends StatelessWidget {
     required this.onBookmark,
   });
 
-  void _share(BuildContext context) {
-    final lang = langByCode(translationLang);
-    final hasNative = shloka.hasNativeTranslation(translationLang);
-    final translation = shloka.getTranslation(translationLang);
+  @override
+  State<ShlokaCard> createState() => _ShlokaCardState();
+}
 
-    final buffer = StringBuffer();
-    buffer.writeln('अष्टावक्र गीता');
-    buffer.writeln(
-        'Chapter $chapterNum  •  Shloka ${shloka.verseNumber}');
-    buffer.writeln();
-    buffer.writeln('━━━━━━━━━━━━━━━━━━━━━━━━');
-    buffer.writeln(shloka.shlok);
-    buffer.writeln();
-    buffer.writeln('── ${lang.name} ──');
-    if (!hasNative && translationLang != 'hi') {
-      buffer.writeln('(${lang.nameEn} translation coming soon — showing Hindi)');
+class _ShlokaCardState extends State<ShlokaCard> {
+  String? _marathiText;
+  bool _translating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.translationLang == 'mr') _loadMarathi();
+  }
+
+  @override
+  void didUpdateWidget(ShlokaCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.translationLang == 'mr' && _marathiText == null && !_translating) {
+      _loadMarathi();
     }
-    buffer.writeln(translation);
-    buffer.writeln();
-    buffer.writeln('── In English ──');
-    buffer.writeln(shloka.expEn);
-    buffer.writeln();
-    buffer.writeln('📱 Ashtavakra Gita App');
-    buffer.write(
-        'https://play.google.com/store/apps/details?id=com.creative.ashtavakra_gita');
+  }
 
+  Future<void> _loadMarathi() async {
+    // Use pre-filled JSON data if available
+    if (widget.shloka.expMr.isNotEmpty) {
+      setState(() => _marathiText = widget.shloka.expMr);
+      return;
+    }
+    setState(() => _translating = true);
+    final provider = context.read<AppProvider>();
+    final translated = await provider.getMarathiTranslation(
+      widget.shloka.id,
+      widget.shloka.shlok,
+    );
+    if (mounted) {
+      setState(() {
+        _marathiText = translated;
+        _translating = false;
+      });
+    }
+  }
+
+  void _share() {
+    final buffer = StringBuffer();
+    buffer.writeln('॥ श्री सत्यनारायण कथा ॥');
+    buffer.writeln('अध्याय ${widget.chapterNum}  •  भाग ${widget.shloka.verseNumber}');
+    buffer.writeln();
+    buffer.writeln(widget.shloka.shlok);
+    if (_marathiText != null && _marathiText!.isNotEmpty) {
+      buffer.writeln();
+      buffer.writeln('── मराठी ──');
+      buffer.writeln(_marathiText);
+    }
+    buffer.writeln();
+    buffer.write('📱 Shri Satyanarayankatha App');
     Share.share(buffer.toString());
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final lang = langByCode(translationLang);
-    final hasNative = shloka.hasNativeTranslation(translationLang);
-    final translation = shloka.getTranslation(translationLang);
+    final showMarathi = widget.translationLang == 'mr';
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ── 1. Sanskrit verse ──────────────────────────────────────────
-          _VerseContainer(
+          // ── Hindi katha ────────────────────────────────────────────────
+          _StoryContainer(
             isDark: isDark,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    _Badge('श्लोक ${shloka.verseNumber}'),
+                    _Badge('भाग ${widget.shloka.verseNumber}'),
                     const Spacer(),
-                    // Share button
                     IconButton(
                       icon: const Icon(Icons.share_outlined,
                           color: Color(0xFFC8922A)),
-                      onPressed: () => _share(context),
+                      onPressed: _share,
                       visualDensity: VisualDensity.compact,
                       tooltip: 'Share',
                     ),
-                    // Bookmark button
                     IconButton(
                       icon: Icon(
-                        isBookmarked
+                        widget.isBookmarked
                             ? Icons.bookmark
                             : Icons.bookmark_outline,
                         color: const Color(0xFFC8922A),
                       ),
-                      onPressed: onBookmark,
+                      onPressed: widget.onBookmark,
                       visualDensity: VisualDensity.compact,
                       tooltip: 'Bookmark',
                     ),
@@ -98,98 +125,91 @@ class ShlokaCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  shloka.shlok,
+                  widget.shloka.shlok,
                   style: GoogleFonts.tiroDevanagariMarathi(
-                    fontSize: fontSize + 2,
-                    height: 1.9,
+                    fontSize: widget.fontSize + 1,
+                    height: 1.85,
                     color: isDark
                         ? const Color(0xFFF5DEB3)
                         : const Color(0xFF3E1E00),
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
 
-          // ── 2. Regional translation ────────────────────────────────────
-          const SizedBox(height: 16),
-          _SectionDivider(
-            label: lang.name,
-            isDark: isDark,
-            showSoon: !hasNative && translationLang != 'hi',
-          ),
-          const SizedBox(height: 12),
-          _ExplanationContainer(
-            isDark: isDark,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (!hasNative && translationLang != 'hi') ...[
-                  Row(
-                    children: [
-                      const Icon(Icons.info_outline,
-                          size: 13, color: Colors.orange),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          '${lang.nameEn} translation coming soon. Showing Hindi.',
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: Colors.orange,
-                            fontStyle: FontStyle.italic,
-                          ),
+          // ── Marathi translation (only when Marathi is selected) ────────
+          if (showMarathi) ...[
+            const SizedBox(height: 20),
+            _SectionDivider(label: 'मराठी', isDark: isDark),
+            const SizedBox(height: 12),
+            _TranslationContainer(
+              isDark: isDark,
+              child: _translating
+                  ? const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Color(0xFFC8922A),
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Text('भाषांतर होत आहे…',
+                                style: TextStyle(
+                                    color: Color(0xFFC8922A), fontSize: 13)),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                ],
-                Text(
-                  translation,
-                  style: GoogleFonts.tiroDevanagariMarathi(
-                    fontSize: fontSize,
-                    height: 1.75,
-                    color: isDark
-                        ? const Color(0xFFE8C99A)
-                        : const Color(0xFF3E1E00),
-                  ),
-                ),
-              ],
+                    )
+                  : _marathiText != null && _marathiText!.isNotEmpty
+                      ? Text(
+                          _marathiText!,
+                          style: GoogleFonts.tiroDevanagariMarathi(
+                            fontSize: widget.fontSize,
+                            height: 1.85,
+                            color: isDark
+                                ? const Color(0xFFE8C99A)
+                                : const Color(0xFF3E1E00),
+                          ),
+                        )
+                      : Row(
+                          children: [
+                            const Icon(Icons.wifi_off_outlined,
+                                size: 14, color: Colors.orange),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                'मराठी भाषांतर उपलब्ध नाही. इंटरनेट तपासा.',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.orange.shade700,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
             ),
-          ),
-
-          // ── 3. English (always) ────────────────────────────────────────
-          const SizedBox(height: 16),
-          _SectionDivider(label: 'In English', isDark: isDark),
-          const SizedBox(height: 12),
-          _ExplanationContainer(
-            isDark: isDark,
-            borderColor: const Color(0xFF1A6B3C),
-            child: Text(
-              shloka.expEn,
-              style: TextStyle(
-                fontSize: fontSize - 1,
-                height: 1.7,
-                color: isDark
-                    ? const Color(0xFFB8D4C0)
-                    : const Color(0xFF1A4A2E),
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ),
+          ],
         ],
       ),
     );
   }
 }
 
-// ── Shared sub-widgets ─────────────────────────────────────────────────────
+// ── Sub-widgets ────────────────────────────────────────────────────────────
 
-class _VerseContainer extends StatelessWidget {
+class _StoryContainer extends StatelessWidget {
   final bool isDark;
   final Widget child;
-  const _VerseContainer({required this.isDark, required this.child});
+  const _StoryContainer({required this.isDark, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -214,12 +234,10 @@ class _VerseContainer extends StatelessWidget {
   }
 }
 
-class _ExplanationContainer extends StatelessWidget {
+class _TranslationContainer extends StatelessWidget {
   final bool isDark;
   final Widget child;
-  final Color? borderColor;
-  const _ExplanationContainer(
-      {required this.isDark, required this.child, this.borderColor});
+  const _TranslationContainer({required this.isDark, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -228,12 +246,11 @@ class _ExplanationContainer extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark
-            ? const Color(0xFF2C1A0A)
-            : Colors.white.withValues(alpha: 0.75),
+            ? const Color(0xFF1A2C1A)
+            : const Color(0xFFEFF7EF),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: (borderColor ?? const Color(0xFFA0522D))
-              .withValues(alpha: 0.25),
+          color: const Color(0xFF4CAF50).withValues(alpha: 0.3),
         ),
       ),
       child: child,
@@ -244,9 +261,7 @@ class _ExplanationContainer extends StatelessWidget {
 class _SectionDivider extends StatelessWidget {
   final String label;
   final bool isDark;
-  final bool showSoon;
-  const _SectionDivider(
-      {required this.label, required this.isDark, this.showSoon = false});
+  const _SectionDivider({required this.label, required this.isDark});
 
   @override
   Widget build(BuildContext context) {
@@ -254,46 +269,23 @@ class _SectionDivider extends StatelessWidget {
       children: [
         Expanded(
           child: Divider(
-              color: const Color(0xFFC8922A).withValues(alpha: 0.35)),
+              color: const Color(0xFF4CAF50).withValues(alpha: 0.4)),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                label,
-                style: GoogleFonts.tiroDevanagariMarathi(
-                  color: const Color(0xFFC8922A),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              if (showSoon) ...[
-                const SizedBox(width: 5),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 5, vertical: 1),
-                  decoration: BoxDecoration(
-                    color: Colors.orange.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                        color: Colors.orange.withValues(alpha: 0.4)),
-                  ),
-                  child: const Text('Soon',
-                      style: TextStyle(
-                          fontSize: 9,
-                          color: Colors.orange,
-                          fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ],
+          child: Text(
+            label,
+            style: GoogleFonts.tiroDevanagariMarathi(
+              color: const Color(0xFF4CAF50),
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+              letterSpacing: 0.5,
+            ),
           ),
         ),
         Expanded(
           child: Divider(
-              color: const Color(0xFFC8922A).withValues(alpha: 0.35)),
+              color: const Color(0xFF4CAF50).withValues(alpha: 0.4)),
         ),
       ],
     );

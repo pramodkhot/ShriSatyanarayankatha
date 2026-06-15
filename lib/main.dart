@@ -11,19 +11,19 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (_) => AppProvider(),
-      child: const AshtavakraGitaApp(),
+      child: const ShriSatyanarayankathaApp(),
     ),
   );
 }
 
-class AshtavakraGitaApp extends StatelessWidget {
-  const AshtavakraGitaApp({super.key});
+class ShriSatyanarayankathaApp extends StatelessWidget {
+  const ShriSatyanarayankathaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AppProvider>();
     return MaterialApp(
-      title: 'Ashtavakra Gita',
+      title: 'Shri Satyanarayankatha',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

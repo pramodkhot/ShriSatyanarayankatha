@@ -15,7 +15,7 @@ class LanguageOption {
 // Add exp_XX field to chapter JSON files to light up each language.
 const List<LanguageOption> kLanguages = [
   LanguageOption(code: 'hi', name: 'हिन्दी',    nameEn: 'Hindi',     available: true),
-  LanguageOption(code: 'mr', name: 'मराठी',     nameEn: 'Marathi',   available: false),
+  LanguageOption(code: 'mr', name: 'मराठी',     nameEn: 'Marathi',   available: true),
   LanguageOption(code: 'gu', name: 'ગુજરાતી',   nameEn: 'Gujarati',  available: false),
   LanguageOption(code: 'bn', name: 'বাংলা',     nameEn: 'Bengali',   available: false),
   LanguageOption(code: 'ta', name: 'தமிழ்',    nameEn: 'Tamil',     available: false),

@@ -2,20 +2,22 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:translator/translator.dart';
 import '../models/chapter.dart';
 import '../models/shloka.dart';
 
 class AppProvider extends ChangeNotifier {
-  // Translation language code (default Hindi).
-  // Sanskrit and English are always shown; only this slot changes.
   String _translationLang = 'hi';
-
   bool _isDarkMode = false;
   double _fontSize = 16.0;
   List<ChapterInfo> _chapters = [];
   List<Shloka> _currentShlokas = [];
   int _currentChapter = 1;
   Set<String> _bookmarks = {};
+
+  // In-memory Marathi translation cache keyed by shloka id.
+  final Map<String, String> _marathiCache = {};
+  final GoogleTranslator _translator = GoogleTranslator();
 
   String get translationLang => _translationLang;
   bool get isDarkMode => _isDarkMode;
@@ -57,6 +59,18 @@ class AppProvider extends ChangeNotifier {
         .map((e) => Shloka.fromJson(e as Map<String, dynamic>))
         .toList();
     notifyListeners();
+  }
+
+  // Translates hindiText to Marathi. Returns cached result if available.
+  Future<String?> getMarathiTranslation(String cacheKey, String hindiText) async {
+    if (_marathiCache.containsKey(cacheKey)) return _marathiCache[cacheKey];
+    try {
+      final result = await _translator.translate(hindiText, from: 'hi', to: 'mr');
+      _marathiCache[cacheKey] = result.text;
+      return result.text;
+    } catch (_) {
+      return null;
+    }
   }
 
   void setTranslationLang(String code) async {

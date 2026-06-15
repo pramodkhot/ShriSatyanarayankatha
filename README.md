@@ -1,4 +1,4 @@
-# ashtavakra_gita
+# shri_satyanarayankatha
 
 A new Flutter project.
 

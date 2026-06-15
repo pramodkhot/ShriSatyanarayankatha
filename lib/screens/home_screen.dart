@@ -100,7 +100,7 @@ class HomeScreen extends StatelessWidget {
                             builder: (_) => const ChapterListScreen()),
                       ),
                       icon: const Icon(Icons.menu_book_rounded),
-                      label: const Text('Read Ashtavakra Gita'),
+                      label: const Text('Read Shri Satyanarayankatha'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFC8922A),
                         foregroundColor: Colors.white,
@@ -136,9 +136,9 @@ class _StatsCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _Stat('20', 'Chapters'),
+            _Stat('1', 'Chapters'),
             _VDivider(),
-            _Stat('298', 'Shlokas'),
+            _Stat('300', 'Items'),
             _VDivider(),
             _Stat('10', 'Languages'),
           ],
@@ -202,7 +202,7 @@ class _AboutSection extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          'The Ashtavakra Gita is a classical Advaita Vedanta scripture that '
+          'The Shri Satyanarayankatha is a classical Advaita Vedanta scripture that '
           'records the dialogue between Sage Ashtavakra and King Janaka on the '
           'nature of the Self, liberation, and ultimate reality.',
           style: TextStyle(
