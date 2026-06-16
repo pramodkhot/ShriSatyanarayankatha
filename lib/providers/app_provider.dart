@@ -52,13 +52,22 @@ class AppProvider extends ChangeNotifier {
 
   Future<void> loadChapter(int chapterNum) async {
     _currentChapter = chapterNum;
+    // All content lives in chapter1.json; load everything so Prev/Next
+    // can navigate across all adhyayas seamlessly.
     final jsonStr =
-        await rootBundle.loadString('assets/database/chapter$chapterNum.json');
+        await rootBundle.loadString('assets/database/chapter1.json');
     final data = jsonDecode(jsonStr) as Map<String, dynamic>;
     _currentShlokas = (data['items'] as List)
         .map((e) => Shloka.fromJson(e as Map<String, dynamic>))
         .toList();
     notifyListeners();
+  }
+
+  // Returns the 0-based PageView index for a given chapter id.
+  int pageIndexForChapter(int chapterId) {
+    final idx = _currentShlokas.indexWhere(
+        (s) => s.id == chapterId.toString());
+    return idx >= 0 ? idx : 0;
   }
 
   // Translates hindiText to Marathi. Returns cached result if available.

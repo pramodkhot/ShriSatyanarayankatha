@@ -95,8 +95,8 @@ class SettingsScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _InfoStat('5', 'Chapters'),
-                _InfoStat('8', 'Sections'),
+                _InfoStat('5', 'Adhyayas'),
+                _InfoStat('3', 'Sections'),
                 _InfoStat('2', 'Languages'),
               ],
             ),

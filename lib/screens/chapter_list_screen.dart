@@ -30,14 +30,18 @@ class ChapterListScreen extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(12),
-                    onTap: () {
-                      context.read<AppProvider>().loadChapter(chapter.id);
+                    onTap: () async {
+                      final provider = context.read<AppProvider>();
+                      await provider.loadChapter(chapter.id);
+                      if (!context.mounted) return;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => ShlokReaderScreen(
                             chapterNum: chapter.id,
                             chapterTitle: chapter.subtitle,
+                            initialPage:
+                                provider.pageIndexForChapter(chapter.id),
                           ),
                         ),
                       );

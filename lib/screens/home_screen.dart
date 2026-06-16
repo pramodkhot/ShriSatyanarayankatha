@@ -136,9 +136,9 @@ class _StatsCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _Stat('1', 'Chapters'),
+            _Stat('5', 'Adhyayas'),
             _VDivider(),
-            _Stat('8', 'Items'),
+            _Stat('3', 'Sections'),
             _VDivider(),
             _Stat('2', 'Languages'),
           ],
