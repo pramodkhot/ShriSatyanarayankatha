@@ -138,9 +138,9 @@ class _StatsCard extends StatelessWidget {
           children: [
             _Stat('1', 'Chapters'),
             _VDivider(),
-            _Stat('300', 'Items'),
+            _Stat('8', 'Items'),
             _VDivider(),
-            _Stat('10', 'Languages'),
+            _Stat('2', 'Languages'),
           ],
         ),
       ),
@@ -202,9 +202,9 @@ class _AboutSection extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          'The Shri Satyanarayankatha is a classical Advaita Vedanta scripture that '
-          'records the dialogue between Sage Ashtavakra and King Janaka on the '
-          'nature of the Self, liberation, and ultimate reality.',
+          'श्री सत्यनारायण व्रत कथा भगवान विष्णु के सत्यनारायण स्वरूप की पूजा और '
+          'व्रत की पावन कथा है। इसमें पाँच अध्याय, पूजा विधि और आरती सम्मिलित हैं। '
+          'यह व्रत मनोकामनाओं की पूर्ति और सुख-समृद्धि के लिए किया जाता है।',
           style: TextStyle(
             fontSize: 14,
             height: 1.7,
@@ -236,7 +236,7 @@ class _QuoteCard extends StatelessWidget {
           const Icon(Icons.format_quote, color: Color(0xFFC8922A), size: 28),
           const SizedBox(height: 8),
           Text(
-            'मुक्ताभिमानी मुक्तो हि बद्धो बद्धाभिमान्यपि।',
+            'सत्यनारायणो विष्णुर्वाञ्छितार्थफलप्रदः।',
             style: GoogleFonts.tiroDevanagariMarathi(
               fontSize: 15,
               height: 1.8,
@@ -249,7 +249,7 @@ class _QuoteCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '"If you think you are free, you are free.\nIf you think you are bound, you are bound."',
+            '"भगवान सत्यनारायण सभी मनोवांछित फलों को देने वाले हैं।"',
             style: TextStyle(
               fontSize: 13,
               height: 1.6,
@@ -260,7 +260,7 @@ class _QuoteCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           const Text(
-            '— Chapter 1, Verse 11',
+            '— प्रथम अध्याय',
             style: TextStyle(
               color: Color(0xFFC8922A),
               fontSize: 11,
