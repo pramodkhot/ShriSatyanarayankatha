@@ -16,8 +16,8 @@ class SettingsScreen extends StatelessWidget {
 
   Future<void> _shareApp() async {
     await Share.share(
-      'Read the Shri Satyanarayankatha — a timeless Advaita Vedanta scripture — '
-      'with Sanskrit, Hindi, and English translations.\n\n'
+      'श्री सत्यनारायण व्रत कथा पढ़ें — हिन्दी और मराठी में।\n\n'
+      'Read Shri Satyanarayana Vrat Katha in Hindi and Marathi.\n\n'
       '📱 Download the app:\n$_playStoreUrl',
     );
   }
@@ -80,9 +80,8 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'The Shri Satyanarayankatha records the dialogue between Sage Ashtavakra '
-              'and King Janaka on the nature of the Self, liberation, and '
-              'ultimate reality.',
+              'श्री सत्यनारायण व्रत कथा भगवान विष्णु के सत्यनारायण स्वरूप की पावन कथा है। '
+              'इसमें पाँच अध्याय, पूजा विधि और आरती सम्मिलित हैं।',
               style: TextStyle(
                 fontSize: 13,
                 height: 1.6,
@@ -96,9 +95,9 @@ class SettingsScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _InfoStat('20', 'Chapters'),
-                _InfoStat('298', 'Shlokas'),
-                _InfoStat('10', 'Languages'),
+                _InfoStat('5', 'Chapters'),
+                _InfoStat('8', 'Sections'),
+                _InfoStat('2', 'Languages'),
               ],
             ),
           ],
